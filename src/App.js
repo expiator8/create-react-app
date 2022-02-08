@@ -1,34 +1,39 @@
 import { useState, userEffet, useEffect } from "react";
 
-function App() {
-  const [counter, setValue] = useState(0);
-  const [keyword, setKeyword] = useState("");
-  const onClick = () => setValue((prev) => prev + 1);
-  const onChange = (event) => setKeyword(event.target.value);
+function Hello() {
+  /* case 1 */
   useEffect(() => {
-    console.log("i run only once");
+    console.log("Created :)");
+    return () => console.log("destroyed :(");
   }, []);
-  useEffect(() => {
-    if (keyword != "" && keyword.length > 5) {
-      console.log("i run when 'keyword' changes.");
-    }
-  }, [keyword]);
-  useEffect(() => {
-    console.log("i run when 'counter' changes.");
-  }, [counter]);
-  useEffect(() => {
-    console.log("i run when 'keyword & counter' changes.");
-  }, [keyword, counter]);
+
+  /* case 2 */
+  // useEffect(function () {
+  //   console.log("Created :)");
+  //   return function () {
+  //     console.log("destroyed :(");
+  //   };
+  // }, []);
+
+  /* case 3 */
+  // function destroyedFn() {
+  //   console.log("destroyed :(");
+  // }
+  // function effectFn() {
+  //   console.log("Created :)");
+  //   return destroyedFn;
+  // }
+  // useEffect(effectFn, []);
+
+  return <h1>Hello</h1>;
+}
+function App() {
+  const [showing, setShowing] = useState(false);
+  const onClick = () => setShowing((prev) => !prev);
   return (
     <div>
-      <input
-        value={keyword}
-        onChange={onChange}
-        type="text"
-        placeholder="Search here..."
-      />
-      <h1>{counter}</h1>
-      <button onClick={onClick}>click me</button>
+      {showing ? <Hello /> : null}
+      <button onClick={onClick}>{showing ? "Hide" : "Show"}</button>
     </div>
   );
 }
