@@ -1,39 +1,35 @@
-import { useState, userEffet, useEffect } from "react";
+import { useState } from "react";
 
-function Hello() {
-  /* case 1 */
-  useEffect(() => {
-    console.log("Created :)");
-    return () => console.log("destroyed :(");
-  }, []);
-
-  /* case 2 */
-  // useEffect(function () {
-  //   console.log("Created :)");
-  //   return function () {
-  //     console.log("destroyed :(");
-  //   };
-  // }, []);
-
-  /* case 3 */
-  // function destroyedFn() {
-  //   console.log("destroyed :(");
-  // }
-  // function effectFn() {
-  //   console.log("Created :)");
-  //   return destroyedFn;
-  // }
-  // useEffect(effectFn, []);
-
-  return <h1>Hello</h1>;
-}
 function App() {
-  const [showing, setShowing] = useState(false);
-  const onClick = () => setShowing((prev) => !prev);
+  const [toDo, setToDo] = useState("");
+  const [toDos, setToDos] = useState([]);
+  const onChange = (event) => setToDo(event.target.value);
+  const onSubmit = (evnet) => {
+    evnet.preventDefault();
+    if (toDo === "") {
+      return;
+    }
+    setToDo("");
+    setToDos((currentArray) => [toDo, ...currentArray]);
+  };
   return (
     <div>
-      {showing ? <Hello /> : null}
-      <button onClick={onClick}>{showing ? "Hide" : "Show"}</button>
+      <h1>My To Dos ({toDos.length})</h1>
+      <form onSubmit={onSubmit}>
+        <input
+          onChange={onChange}
+          value={toDo}
+          type="text"
+          placeholder="Write your to do..."
+        />
+        <button>Add To Do</button>
+      </form>
+      <hr />
+      <ul>
+        {toDos.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
     </div>
   );
 }
